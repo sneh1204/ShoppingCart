@@ -23,7 +23,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class MainActivity extends AppCompatActivity implements com.example.shoppingcart.LoginFragment.ILogin, ProfileViewFragment.IProfileView, RegisterFragment.IRegister, UpdateProfileFragment.IUpdateProfile {
+public class MainActivity extends AppCompatActivity implements ShoppingCartFragment.ICart, ProductsFragment.IProducts, com.example.shoppingcart.LoginFragment.ILogin, ProfileViewFragment.IProfileView, RegisterFragment.IRegister, UpdateProfileFragment.IUpdateProfile {
 
     private final OkHttpClient client = new OkHttpClient();
 
@@ -110,6 +110,13 @@ public class MainActivity extends AppCompatActivity implements com.example.shopp
     public void sendLoginView(){
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.containerLayout, new com.example.shoppingcart.LoginFragment())
+                .commit();
+    }
+
+    @Override
+    public void sendCartView() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.containerLayout, new com.example.shoppingcart.ShoppingCartFragment())
                 .commit();
     }
 

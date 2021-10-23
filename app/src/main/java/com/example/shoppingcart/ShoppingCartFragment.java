@@ -1,5 +1,6 @@
 package com.example.shoppingcart;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,12 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.shoppingcart.databinding.FragmentShoppingCartBinding;
+import com.example.shoppingcart.models.User;
 import com.google.android.material.navigation.NavigationBarView;
 
 
 public class ShoppingCartFragment extends Fragment {
 
     FragmentShoppingCartBinding binding;
+    ICart am;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,17 +41,34 @@ public class ShoppingCartFragment extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.products:
+                        am.sendProductsView();
                         return true;
                     case R.id.history:
                         return true;
                     case R.id.cart:
                         return true;
                     case R.id.logout:
+                        am.sendLoginView();
                         return true;
                 }
                 return false;
             }
         });
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof ICart) {
+            am = (ICart) context;
+        } else {
+            throw new RuntimeException(context.toString());
+        }
+    }
+
+    public interface ICart {
+        void sendLoginView();
+        void sendProductsView();
     }
 }
