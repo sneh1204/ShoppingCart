@@ -46,6 +46,8 @@ public class LoginFragment extends Fragment {
 
         void login(MainActivity.Return response, String... data);
 
+        void sendProductsView();
+
     }
 
     @Override
@@ -83,7 +85,8 @@ public class LoginFragment extends Fragment {
                         User user = gson.fromJson(response, User.class);
 
                         am.setUser(user);
-                        am.sendProfileView();
+                        //am.sendProfileView();
+                        am.sendProductsView();
                     }
 
                     @Override

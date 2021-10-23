@@ -100,6 +100,13 @@ public class MainActivity extends AppCompatActivity implements com.example.shopp
         sendRequest(request, response);
     }
 
+    @Override
+    public void sendProductsView() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.containerLayout, new com.example.shoppingcart.ProductsFragment())
+                .commit();
+    }
+
     public void sendLoginView(){
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.containerLayout, new com.example.shoppingcart.LoginFragment())
