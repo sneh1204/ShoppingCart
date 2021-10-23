@@ -5,12 +5,12 @@
         android:id="@+id/products"
         android:enabled="true"
         android:icon="@drawable/products"
-        android:title="Bids"/>
+        android:title="Products"/>
     <item
         android:id="@+id/cart"
         android:enabled="true"
         android:icon="@drawable/shopping_cart"
-        android:title="Bids"/>
+        android:title="Cart"/>
     <item
         android:id="@+id/history"
         android:enabled="true"
