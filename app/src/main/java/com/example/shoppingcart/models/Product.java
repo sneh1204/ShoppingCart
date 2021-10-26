@@ -2,17 +2,29 @@ package com.example.shoppingcart.models;
 
 public class Product {
     String name;
-    String photoUrl;
+    String photo;
     String region;
     double price;
     double discount;
+    int qty;
+    double total_product_price;
 
-    public Product(String name, String photoUrl, String region, double price, double discount) {
+    public Product(String name, String photo, String region, double price, double discount) {
         this.name = name;
-        this.photoUrl = photoUrl;
+        this.photo = photo;
         this.region = region;
         this.price = price;
         this.discount = discount;
+    }
+
+    public Product(String name, String photo, String region, double price, double discount, int qty,double total_product_price ) {
+        this.name = name;
+        this.photo = photo;
+        this.region = region;
+        this.price = price;
+        this.discount = discount;
+        this.qty = qty;
+        this.total_product_price = total_product_price;
     }
 
     public String getName() {
@@ -23,12 +35,12 @@ public class Product {
         this.name = name;
     }
 
-    public String getPhotoUrl() {
-        return photoUrl;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getRegion() {
@@ -55,14 +67,40 @@ public class Product {
         this.discount = discount;
     }
 
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
+
+    public double getTotal_product_price() {
+        return total_product_price;
+    }
+
+    public void setTotal_product_price(double total_product_price) {
+        this.total_product_price = total_product_price;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
                 "name='" + name + '\'' +
-                ", photoUrl='" + photoUrl + '\'' +
+                ", photo='" + photo + '\'' +
                 ", region='" + region + '\'' +
                 ", price=" + price +
                 ", discount=" + discount +
+                ", qty=" + qty +
+                ", total_product_price=" + total_product_price +
                 '}';
+    }
+
+    public  static double calculateProductPrice(double price, double discount, int updatedQuantity) {
+        double discountPrice ;
+        double total_amount;
+        discountPrice = (price * discount)/100;
+        total_amount = (price - discountPrice) * updatedQuantity;
+        return total_amount;
     }
 }

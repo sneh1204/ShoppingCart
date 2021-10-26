@@ -2,7 +2,6 @@ package com.example.shoppingcart.models;
 
 public class Utils {
 
-    public static final String TAG = "demo";
     public static final String MESSAGE = "message";
 
     public static Integer parseInt(String value){

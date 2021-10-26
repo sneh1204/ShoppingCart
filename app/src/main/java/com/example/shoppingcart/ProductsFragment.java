@@ -11,10 +11,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import android.util.Log;
@@ -25,15 +23,21 @@ import android.view.ViewGroup;
 
 import com.example.shoppingcart.databinding.FragmentProductsBinding;
 import com.example.shoppingcart.models.Product;
+import com.example.shoppingcart.models.ShoppingCart;
 import com.example.shoppingcart.models.User;
 import com.example.shoppingcart.models.Utils;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class ProductsFragment extends Fragment {
@@ -42,6 +46,7 @@ public class ProductsFragment extends Fragment {
     FragmentProductsBinding binding;
     IProducts am;
     User user;
+    ShoppingCart cart = new ShoppingCart();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +94,7 @@ public class ProductsFragment extends Fragment {
     /*.....To Get ALL Products.....*/
     public void getAllProducts() {
         Request request = new Request.Builder()
-                .url(MainActivity.BASE_URL+"product/getAll")
+                .url("https://mysterious-beach-05426.herokuapp.com/product/getAll")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -101,29 +106,16 @@ public class ProductsFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.isSuccessful()){
-                    try {
-                        JSONObject responseObject = new JSONObject(response.body().string());
-                        Log.d("demo", "onResponse: "+responseObject);
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                binding.recyclerView.setHasFixedSize(true);
-                                LinearLayoutManager llm = new LinearLayoutManager(getContext());
-                                binding.recyclerView.setLayoutManager(llm);
-
-                                DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(binding.recyclerView.getContext(),
-                                        llm.getOrientation());
-                                binding.recyclerView.addItemDecoration(dividerItemDecoration);
-
-                                ArrayList<Product> productArrayList = new ArrayList<>();
-                                // productArrayList will come from API
-                               // binding.recyclerView.setAdapter(new ProductAdapter(productArrayList));
-                            }
-                        });
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    String responseObject = response.body().string();
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<List<Product>>(){}.getType();
+                    ArrayList<Product> productArrayList = gson.fromJson(responseObject, type);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            reloadProductList(productArrayList);
+                        }
+                    });
                 }else{
                     try {
                         JSONObject responseObject = new JSONObject(response.body().string());
@@ -142,6 +134,17 @@ public class ProductsFragment extends Fragment {
 
             }
         });
+    }
+
+    public void reloadProductList(ArrayList<Product> productArrayList){
+        binding.productView.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        binding.productView.setLayoutManager(llm);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(binding.productView.getContext(), llm.getOrientation());
+        binding.productView.addItemDecoration(dividerItemDecoration);
+
+        binding.productView.setAdapter(new ProductAdapter(productArrayList));
     }
 
     /* Alert Dialog Box */
