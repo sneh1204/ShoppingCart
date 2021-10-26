@@ -26,7 +26,7 @@ public class UpdateProfileFragment extends Fragment {
 
     User user;
 
-    String email, fullname, weight, age, address;
+    String email, fullname, address;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -65,8 +65,6 @@ public class UpdateProfileFragment extends Fragment {
         user = am.getUser();
 
         binding.editTextTextPersonName.setText(user.getFullname());
-        binding.editTextTextPersonName2.setText(user.getAge() + "");
-        binding.editTextTextPersonName3.setText(user.getWeight() + "");
         binding.editTextTextPersonName4.setText(user.getAddress());
         binding.editTextTextPersonName5.setText(user.getEmail());
 
@@ -75,27 +73,18 @@ public class UpdateProfileFragment extends Fragment {
             public void onClick(View view) {
 
                 fullname = binding.editTextTextPersonName.getText().toString();
-                age = binding.editTextTextPersonName2.getText().toString();
-                weight = binding.editTextTextPersonName3.getText().toString();
                 address = binding.editTextTextPersonName4.getText().toString();
                 email = binding.editTextTextPersonName5.getText().toString();
 
-                if(email.isEmpty() || fullname.isEmpty() || age.isEmpty() || weight.isEmpty() || address.isEmpty()){
+                if(email.isEmpty() || fullname.isEmpty()  || address.isEmpty()){
                     am.alert("Please enter all values for updating!");
-                    return;
-                }
-
-                Integer fage = Utils.parseInt(age);
-                Integer fweight = Utils.parseInt(weight);
-                if(fage == null || fweight == null){
-                    Toast.makeText(getContext(), "Please enter valid values for age | weight!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 am.update(new com.example.shoppingcart.MainActivity.Return() {
                     @Override
                     public void response(@NotNull String response) {
-                        user.updateUser(fweight, fage, fullname, address, email);
+                        user.updateUser(fullname, address, email);
                         am.setUser(user);
                         am.alert("Profile Updated!");
                         am.goBack();
@@ -105,7 +94,7 @@ public class UpdateProfileFragment extends Fragment {
                     public void error(@NotNull String response) {
                     }
 
-                }, fullname, age, weight, address, email);
+                }, fullname, address, email);
             }
         });
 

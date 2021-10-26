@@ -59,10 +59,8 @@ public class MainActivity extends AppCompatActivity implements ShoppingCartFragm
     public void update(Return response, String ...data){
         FormBody formBody = new FormBody.Builder()
                 .add("fullname", data[0])
-                .add("age", data[1])
-                .add("weight", data[2])
-                .add("address", data[3])
-                .add("email", data[4])
+                .add("address", data[1])
+                .add("email", data[2])
                 .build();
         Request request = new Request.Builder()
                 .url(BASE_URL + "profile/update")
@@ -75,11 +73,9 @@ public class MainActivity extends AppCompatActivity implements ShoppingCartFragm
     public void register(Return response, String... data){
         FormBody formBody = new FormBody.Builder()
                 .add("fullname", data[0])
-                .add("age", data[1])
-                .add("weight", data[2])
-                .add("address", data[3])
-                .add("email", data[4])
-                .add("pass", data[5])
+                .add("address", data[1])
+                .add("email", data[2])
+                .add("pass", data[3])
                 .build();
         Request request = new Request.Builder()
                 .url(BASE_URL + "auth/signup")

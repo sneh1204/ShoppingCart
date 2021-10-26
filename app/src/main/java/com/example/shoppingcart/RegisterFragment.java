@@ -24,7 +24,7 @@ public class RegisterFragment extends Fragment {
 
     IRegister am;
 
-    String fullname, age, weight, address, email, pass;
+    String fullname, address, email, pass;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -69,23 +69,15 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 fullname = binding.edittext.getText().toString();
-                age = binding.edittext2.getText().toString();
-                weight = binding.edittext3.getText().toString();
                 address = binding.edittext4.getText().toString();
                 email = binding.edittext5.getText().toString();
                 pass = binding.edittext6.getText().toString();
 
-                if(email.isEmpty() || fullname.isEmpty() || age.isEmpty() || weight.isEmpty() || address.isEmpty() || pass.isEmpty()){
+                if(email.isEmpty() || fullname.isEmpty() || address.isEmpty() || pass.isEmpty()){
                     am.alert("Please enter all values for registering!");
                     return;
                 }
 
-                Integer fage = Utils.parseInt(age);
-                Integer fweight = Utils.parseInt(weight);
-                if(fage == null || fweight == null){
-                    Toast.makeText(getContext(), "Please enter valid values for age | weight!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
                 am.register(new com.example.shoppingcart.MainActivity.Return() {
                     @Override
@@ -100,7 +92,7 @@ public class RegisterFragment extends Fragment {
                     @Override
                     public void error(@NotNull String response) {
                     }
-                }, fullname, age, weight, address, email, pass);
+                }, fullname, address, email, pass);
 
             }
         });

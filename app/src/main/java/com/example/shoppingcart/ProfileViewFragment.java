@@ -68,8 +68,6 @@ public class ProfileViewFragment extends Fragment {
 
                 binding.textView6.setText(user.getFullname());
                 binding.textView7.setText(user.getEmail());
-                binding.textView8.setText(user.getAge() + " years");
-                binding.textView9.setText(user.getWeight() + " Kg");
                 binding.textView10.setText(user.getAddress());
             }
 

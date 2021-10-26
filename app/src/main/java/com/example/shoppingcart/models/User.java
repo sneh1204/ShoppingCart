@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    private int weight, age;
-
     private String uid, token, fullname, address, email;
 
     public String getUid() {
@@ -16,9 +14,8 @@ public class User implements Serializable {
         this.uid = uid;
     }
 
-    public void updateUser(int weight, int age, String fullname, String address, String email) {
-        this.weight = weight;
-        this.age = age;
+    public void updateUser(String fullname, String address, String email) {
+
         this.fullname = fullname;
         this.address = address;
         this.email = email;
@@ -38,9 +35,7 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "weight=" + weight +
-                ", age=" + age +
-                ", token=" + token +
+                "token=" + token +
                 ", uid=" + uid +
                 ", fullname='" + fullname + '\'' +
                 ", address='" + address + '\'' +
@@ -48,21 +43,6 @@ public class User implements Serializable {
                 '}';
     }
 
-    public int getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
 
     public String getFullname() {
         return fullname;
