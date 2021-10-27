@@ -1,19 +1,25 @@
 package com.example.shoppingcart;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.braintreepayments.api.dropin.DropInActivity;
+import com.braintreepayments.api.dropin.DropInRequest;
+import com.braintreepayments.api.dropin.DropInResult;
 import com.example.shoppingcart.databinding.FragmentShoppingCartBinding;
 import com.example.shoppingcart.models.Product;
 import com.example.shoppingcart.models.ShoppingCart;
@@ -24,6 +30,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 public class ShoppingCartFragment extends Fragment {
@@ -31,6 +38,42 @@ public class ShoppingCartFragment extends Fragment {
     FragmentShoppingCartBinding binding;
     ICart am;
     User user;
+    CartAdapter adapter;
+
+    ActivityResultLauncher<Intent> dropinLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                Intent data = result.getData();
+                if (result.getResultCode() == MainActivity.RESULT_OK) {
+                    DropInResult dropresult = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
+                    String paymentMethodNonce = dropresult.getPaymentMethodNonce().getNonce();
+                    am.checkout(new MainActivity.Return() {
+                        @Override
+                        public void response(@NonNull String response) {
+                            user.setShoppingCart(new ShoppingCart());
+                            binding.totalPrice.setText("$" + String.format("%.2f", user.getShoppingCart().getTotalCartCost()));
+                            adapter.updateData();
+                            am.alert("Purchase was successful!");
+                        }
+
+                        @Override
+                        public void error(@NonNull String response) {
+                        }
+
+                        @Override
+                        public boolean showDialog() {
+                            return true;
+                        }
+                    }, paymentMethodNonce, user.getShoppingCart().getTotalCartCost(), user.getShoppingCart().getProductList());
+
+                } else if (result.getResultCode() == MainActivity.RESULT_CANCELED) {
+                    Toast.makeText(getContext(), "Checkout cancelled", Toast.LENGTH_SHORT).show();
+                } else {
+                    // an error occurred, checked the returned exception
+                    Exception exception = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
+                    Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +112,16 @@ public class ShoppingCartFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(binding.recyclerView.getContext(), llm.getOrientation());
         binding.recyclerView.addItemDecoration(dividerItemDecoration);
 
+        binding.button7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                user.setShoppingCart(new ShoppingCart());
+                adapter.updateData();
+                binding.totalPrice.setText("$" + String.format("%.2f", user.getShoppingCart().getTotalCartCost()));
+                am.alert("Cart cleared!");
+            }
+        });
+
         am.getProducts(new MainActivity.Return() {
             @Override
             public void response(@NonNull String response) {
@@ -77,13 +130,14 @@ public class ShoppingCartFragment extends Fragment {
                 Gson gson = builder.create();
                 Product[] products = gson.fromJson(response, Product[].class);
 
-                binding.recyclerView.setAdapter(new CartAdapter(user, new ArrayList<>(Arrays.asList(products)), new CartAdapter.onUpdate() {
+                adapter = new CartAdapter(user, new ArrayList<>(Arrays.asList(products)), new CartAdapter.onUpdate() {
                     @Override
                     public void update(User user) {
                         binding.totalPrice.setText("$" + String.format("%.2f", user.getShoppingCart().getTotalCartCost()));
                         am.setUser(user);
                     }
-                }));
+                });
+                binding.recyclerView.setAdapter(adapter);
             }
 
             @Override
@@ -99,6 +153,29 @@ public class ShoppingCartFragment extends Fragment {
         binding.checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(user.getShoppingCart().getProductList().size() == 0){
+                    am.alert("Please add something to cart to checkout!");
+                    return;
+                }
+
+                am.clientToken(new MainActivity.Return() {
+                    @Override
+                    public void response(@NonNull String response) {
+                        DropInRequest dropInRequest = new DropInRequest()
+                                .clientToken(response); // client token
+                        dropinLauncher.launch(dropInRequest.getIntent(getContext()));
+                    }
+
+                    @Override
+                    public void error(@NonNull String response) {
+
+                    }
+
+                    @Override
+                    public boolean showDialog() {
+                        return true;
+                    }
+                });
 
             }
         });
@@ -117,7 +194,10 @@ public class ShoppingCartFragment extends Fragment {
     }
 
     public interface ICart {
+        void checkout(MainActivity.Return response, String nonce, double amount, HashMap<String, Product> productList);
+        void alert(String msg);
         void setUser(User user);
+        void clientToken(MainActivity.Return response);
         User getUser();
         void sendLoginView();
         void sendProductsView();

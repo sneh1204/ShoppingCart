@@ -97,7 +97,6 @@ public class LoginFragment extends Fragment {
                         User user = gson.fromJson(response, User.class);
 
                         am.setUser(user);
-                        //am.sendProfileView();
                         am.sendProductsView();
                     }
 

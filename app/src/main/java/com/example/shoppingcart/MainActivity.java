@@ -3,18 +3,21 @@ package com.example.shoppingcart;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.shoppingcart.models.Product;
 import com.example.shoppingcart.models.User;
+import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -49,10 +52,30 @@ public class MainActivity extends AppCompatActivity implements ShoppingCartFragm
         sendLoginView();
     }
 
-    public void checkout(Return response){
+    public void clientToken(Return response){
+        FormBody formBody = new FormBody.Builder()
+                .add("customerId", user.getCustomerId())
+                .build();
+        Request request = new Request.Builder()
+                .url(BASE_URL + "product/clienttoken")
+                .addHeader("x-jwt-token", user.getToken())
+                .post(formBody)
+                .build();
+        sendRequest(request, response);
+    }
+
+    public void checkout(Return response, String nonce, double amount, HashMap<String, Product> productList){
+        Gson gson = new Gson();
+        FormBody formBody = new FormBody.Builder()
+                .add("paymentMethodNonce", nonce)
+                .add("amount", String.format("%.2f", amount))
+                .add("stamp", System.currentTimeMillis() + "")
+                .add("products", gson.toJson(productList))
+                .build();
         Request request = new Request.Builder()
                 .url(BASE_URL + "product/checkout")
                 .addHeader("x-jwt-token", user.getToken())
+                .post(formBody)
                 .build();
         sendRequest(request, response);
     }

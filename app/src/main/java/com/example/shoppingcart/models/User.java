@@ -4,9 +4,17 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    private String uid, token, fullname, address, email;
+    private String uid, customerId, token, fullname, address, email;
 
     ShoppingCart shoppingCart = new ShoppingCart();
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
 
     public ShoppingCart getShoppingCart() {
         return shoppingCart;
@@ -45,14 +53,15 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "token=" + token +
-                ", uid=" + uid +
+                "uid='" + uid + '\'' +
+                ", customerId='" + customerId + '\'' +
+                ", token='" + token + '\'' +
                 ", fullname='" + fullname + '\'' +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
+                ", shoppingCart=" + shoppingCart +
                 '}';
     }
-
 
     public String getFullname() {
         return fullname;
