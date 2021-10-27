@@ -16,7 +16,6 @@ import java.util.HashMap;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.UViewHolder>{
 
-    ArrayList<Product> og_products;
     CartItemViewBinding binding;
     ViewGroup parent;
     private String[] mKeys;
@@ -25,8 +24,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.UViewHolder>{
 
     onUpdate am;
 
-    public CartAdapter(User user, ArrayList<Product> og_products, onUpdate am) {
-        this.og_products = og_products;
+    public CartAdapter(User user, onUpdate am) {
         this.am = am;
         this.user = user;
         updateData();

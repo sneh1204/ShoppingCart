@@ -123,33 +123,11 @@ public class ShoppingCartFragment extends Fragment {
             }
         });
 
-        am.getProducts(new MainActivity.Return() {
-            @Override
-            public void response(@NonNull String response) {
-
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                Product[] products = gson.fromJson(response, Product[].class);
-
-                adapter = new CartAdapter(user, new ArrayList<>(Arrays.asList(products)), new CartAdapter.onUpdate() {
-                    @Override
-                    public void update(User user) {
-                        binding.totalPrice.setText("$" + String.format("%.2f", user.getShoppingCart().getTotalCartCost()));
-                        am.setUser(user);
-                    }
-                });
-                binding.recyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public boolean showDialog() {
-                return true;
-            }
-
-            @Override
-            public void error(@NonNull String response) {
-            }
+        adapter = new CartAdapter(user, user -> {
+            binding.totalPrice.setText("$" + String.format("%.2f", user.getShoppingCart().getTotalCartCost()));
+            am.setUser(user);
         });
+        binding.recyclerView.setAdapter(adapter);
 
         binding.checkout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,6 +181,5 @@ public class ShoppingCartFragment extends Fragment {
         User getUser();
         void sendLoginView();
         void sendProductsView();
-        void getProducts(MainActivity.Return response);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.shoppingcart.models;
 
+import java.util.Objects;
+
 public class Product {
     String _id;
     String name;
@@ -8,6 +10,19 @@ public class Product {
     double price;
     double discount;
     int qty = 1;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(_id, product._id) && Objects.equals(name, product.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(_id, name);
+    }
 
     public String get_id() {
         return _id;

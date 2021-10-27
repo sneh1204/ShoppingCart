@@ -23,6 +23,8 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ProductsFragment extends Fragment {
@@ -109,7 +111,11 @@ public class ProductsFragment extends Fragment {
                 Gson gson = builder.create();
                 Product[] products = gson.fromJson(response, Product[].class);
 
-                binding.productView.setAdapter(new ProductAdapter(user, new ArrayList<>(Arrays.asList(products))));
+                ArrayList<Product> productArrayList = new ArrayList<>(Arrays.asList(products));
+
+                updateCart(productArrayList);
+
+                binding.productView.setAdapter(new ProductAdapter(user, productArrayList));
             }
 
             @Override
@@ -125,6 +131,16 @@ public class ProductsFragment extends Fragment {
        return view;
     }
 
+    public void updateCart(ArrayList<Product> products){
+        HashMap<String, Product> new_products = new HashMap<>();
+        for(Map.Entry<String, Product> entry
+        : user.getShoppingCart().getProductList().entrySet()){
+            Product product = products.get(products.indexOf(entry.getValue()));
+            product.setQty(entry.getValue().getQty());
+            new_products.put(entry.getKey(), product);
+        }
+        user.getShoppingCart().setProductList(new_products);
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
