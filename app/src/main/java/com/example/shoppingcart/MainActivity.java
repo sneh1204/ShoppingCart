@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements HistoryFragment.I
 
     User user = null;
 
-    public static final String BASE_URL  = "http://10.0.2.2:3000/"; // http://10.0.2.2:3000/ or https://mysterious-beach-05426.herokuapp.com/
+    public static final String BASE_URL  = "https://mysterious-beach-05426.herokuapp.com/"; // http://10.0.2.2:3000/ or https://mysterious-beach-05426.herokuapp.com/
 
     @Override
     public void setUser(User user) {
