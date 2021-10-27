@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.shoppingcart.models.Product;
+import com.example.shoppingcart.models.Transaction;
 import com.example.shoppingcart.models.User;
 import com.google.gson.Gson;
 
@@ -27,7 +28,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class MainActivity extends AppCompatActivity implements ShoppingCartFragment.ICart, ProductsFragment.IProducts, com.example.shoppingcart.LoginFragment.ILogin, ProfileViewFragment.IProfileView, RegisterFragment.IRegister, UpdateProfileFragment.IUpdateProfile {
+public class MainActivity extends AppCompatActivity implements HistoryFragment.IHistory, ShoppingCartFragment.ICart, ProductsFragment.IProducts, com.example.shoppingcart.LoginFragment.ILogin, ProfileViewFragment.IProfileView, RegisterFragment.IRegister, UpdateProfileFragment.IUpdateProfile {
 
     private final OkHttpClient client = new OkHttpClient();
 
@@ -96,6 +97,13 @@ public class MainActivity extends AppCompatActivity implements ShoppingCartFragm
         sendRequest(request, response);
     }
 
+    public void sendTransactionView(Transaction transaction){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.containerLayout, TransactionFragment.newInstance(transaction))
+                .addToBackStack(null)
+                .commit();
+    }
+
     public void update(Return response, String ...data){
         FormBody formBody = new FormBody.Builder()
                 .add("fullname", data[0])
@@ -124,6 +132,14 @@ public class MainActivity extends AppCompatActivity implements ShoppingCartFragm
         sendRequest(request, response);
     }
 
+    public void history(Return response){
+        Request request = new Request.Builder()
+                .url(BASE_URL + "product/history")
+                .addHeader("x-jwt-token", user.getToken())
+                .build();
+        sendRequest(request, response);
+    }
+
     public void login(Return response, String... data){
         FormBody formBody = new FormBody.Builder()
                 .add("email", data[0])
@@ -140,6 +156,13 @@ public class MainActivity extends AppCompatActivity implements ShoppingCartFragm
     public void sendProductsView() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.containerLayout, new ProductsFragment())
+                .commit();
+    }
+
+    @Override
+    public void sendHistoryView() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.containerLayout, new HistoryFragment())
                 .commit();
     }
 

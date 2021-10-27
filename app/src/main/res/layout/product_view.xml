@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/productImage"
         app:layout_constraintTop_toBottomOf="@+id/productPrice" />
@@ -104,5 +104,16 @@
         app:layout_constraintTop_toBottomOf="@+id/productImage"
         app:layout_constraintStart_toEndOf="@+id/negbtn"
         tools:layout_editor_absoluteY="145dp" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textStyle="italic"
+        app:layout_constraintStart_toEndOf="@+id/productImage"
+        app:layout_constraintTop_toBottomOf="@+id/productDiscount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

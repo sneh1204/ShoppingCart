@@ -71,6 +71,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.UViewHol
         holder.binding.textView4.setTextColor(0xFF50C878);
 
         holder.binding.productDiscount.setText("Discount " + product.getDiscount() + "%");
+        holder.binding.textView11.setText(product.getRegion());
 
         String photo = product.getPhoto();
         String photoName;

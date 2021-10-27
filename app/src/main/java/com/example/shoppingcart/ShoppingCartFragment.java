@@ -93,6 +93,7 @@ public class ShoppingCartFragment extends Fragment {
                         am.sendProductsView();
                         return true;
                     case R.id.history:
+                        am.sendHistoryView();
                         return true;
                     case R.id.cart:
                         return true;
@@ -197,6 +198,7 @@ public class ShoppingCartFragment extends Fragment {
         void checkout(MainActivity.Return response, String nonce, double amount, HashMap<String, Product> productList);
         void alert(String msg);
         void setUser(User user);
+        void sendHistoryView();
         void clientToken(MainActivity.Return response);
         User getUser();
         void sendLoginView();

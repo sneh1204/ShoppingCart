@@ -80,6 +80,7 @@ public class ProductsFragment extends Fragment {
                     case R.id.products:
                         return true;
                     case R.id.history:
+                        am.sendHistoryView();
                         return true;
                     case R.id.cart:
                         am.sendCartView();
@@ -137,6 +138,7 @@ public class ProductsFragment extends Fragment {
 
     public interface IProducts {
         User getUser();
+        void sendHistoryView();
         void setUser(User user);
         void sendLoginView();
         void sendCartView();
