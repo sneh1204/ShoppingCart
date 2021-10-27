@@ -38,16 +38,25 @@ public class LoginFragment extends Fragment {
 
         void setUser(User user);
 
+        User getUser();
+
         void alert(String msg);
 
         void sendRegisterView();
-
-        void sendProfileView();
 
         void login(MainActivity.Return response, String... data);
 
         void sendProductsView();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(am.getUser() != null){
+            am.sendProductsView();
+        }
     }
 
     @Override
@@ -57,6 +66,9 @@ public class LoginFragment extends Fragment {
 
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        binding.emailTextFieldId.setText("s@s.com");
+        binding.passwordTextFieldId.setText("test123");
 
         binding.createNewAccountId.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +99,11 @@ public class LoginFragment extends Fragment {
                         am.setUser(user);
                         //am.sendProfileView();
                         am.sendProductsView();
+                    }
+
+                    @Override
+                    public boolean showDialog() {
+                        return true;
                     }
 
                     @Override

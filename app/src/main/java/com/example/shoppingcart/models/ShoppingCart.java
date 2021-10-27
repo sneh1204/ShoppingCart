@@ -1,37 +1,32 @@
 package com.example.shoppingcart.models;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ShoppingCart {
-    ArrayList<Product> productArrayList;
-    double amount;
+
+    HashMap<String, Product> productArrayList = new HashMap<>();
 
     public ShoppingCart() {
-        this.productArrayList = productArrayList;
-        this.amount = amount;
     }
 
-    public ArrayList<Product> getProductArrayList() {
+    public HashMap<String, Product> getProductArrayList() {
         return productArrayList;
     }
 
-    public void setProductArrayList(ArrayList<Product> productArrayList) {
+    public int quantity(Product product) {
+        if (getProductArrayList().containsKey(product.get_id()))
+            return getProductArrayList().get(product.get_id()).qty;
+        else return 0;
+    }
+
+    public void setProductArrayList(HashMap<String, Product> productArrayList) {
         this.productArrayList = productArrayList;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
     }
 
     @Override
     public String toString() {
         return "ShoppingCart{" +
                 "productArrayList=" + productArrayList +
-                ", amount=" + amount +
                 '}';
     }
 }

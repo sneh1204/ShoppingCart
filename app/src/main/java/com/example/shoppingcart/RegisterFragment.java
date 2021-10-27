@@ -44,7 +44,7 @@ public class RegisterFragment extends Fragment {
 
         void goBack();
 
-        void sendProfileView();
+        void sendProductsView();
 
         void register(com.example.shoppingcart.MainActivity.Return response, String... data);
 
@@ -86,7 +86,12 @@ public class RegisterFragment extends Fragment {
                         Gson gson = builder.create();
                         User user = gson.fromJson(response, User.class);
                         am.setUser(user);
-                        am.sendProfileView();
+                        am.sendProductsView();
+                    }
+
+                    @Override
+                    public boolean showDialog() {
+                        return true;
                     }
 
                     @Override

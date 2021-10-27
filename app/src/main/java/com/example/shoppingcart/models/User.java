@@ -6,6 +6,16 @@ public class User implements Serializable {
 
     private String uid, token, fullname, address, email;
 
+    ShoppingCart shoppingCart = new ShoppingCart();
+
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
+    }
+
+    public void setShoppingCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
+    }
+
     public String getUid() {
         return uid;
     }

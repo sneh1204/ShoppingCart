@@ -53,7 +53,7 @@ public class ProfileViewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        am.profile(new com.example.shoppingcart.MainActivity.Return() {
+        am.profile(new MainActivity.Return() {
             @Override
             public void response(@NotNull String response) {
                 GsonBuilder builder = new GsonBuilder();
@@ -69,6 +69,11 @@ public class ProfileViewFragment extends Fragment {
                 binding.textView6.setText(user.getFullname());
                 binding.textView7.setText(user.getEmail());
                 binding.textView10.setText(user.getAddress());
+            }
+
+            @Override
+            public boolean showDialog() {
+                return true;
             }
 
             @Override

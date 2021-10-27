@@ -91,6 +91,11 @@ public class UpdateProfileFragment extends Fragment {
                     }
 
                     @Override
+                    public boolean showDialog() {
+                        return true;
+                    }
+
+                    @Override
                     public void error(@NotNull String response) {
                     }
 

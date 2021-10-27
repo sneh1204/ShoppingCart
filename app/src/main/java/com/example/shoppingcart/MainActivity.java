@@ -3,6 +3,7 @@ package com.example.shoppingcart;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements ShoppingCartFragm
 
     User user = null;
 
-    public static final String BASE_URL  = "https://mysterious-beach-05426.herokuapp.com/"; // http://10.0.2.2:3000/ or https://mysterious-beach-05426.herokuapp.com/
+    public static final String BASE_URL  = "http://10.0.2.2:3000/"; // http://10.0.2.2:3000/ or https://mysterious-beach-05426.herokuapp.com/
 
     @Override
     public void setUser(User user) {
@@ -51,6 +52,14 @@ public class MainActivity extends AppCompatActivity implements ShoppingCartFragm
     public void profile(Return response){
         Request request = new Request.Builder()
                 .url(BASE_URL + "profile/view")
+                .addHeader("x-jwt-token", user.getToken())
+                .build();
+        sendRequest(request, response);
+    }
+
+    public void getProducts(Return response){
+        Request request = new Request.Builder()
+                .url(BASE_URL + "product/getAll")
                 .addHeader("x-jwt-token", user.getToken())
                 .build();
         sendRequest(request, response);
@@ -99,20 +108,20 @@ public class MainActivity extends AppCompatActivity implements ShoppingCartFragm
     @Override
     public void sendProductsView() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.containerLayout, new com.example.shoppingcart.ProductsFragment())
+                .replace(R.id.containerLayout, new ProductsFragment())
                 .commit();
     }
 
     public void sendLoginView(){
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.containerLayout, new com.example.shoppingcart.LoginFragment())
+                .replace(R.id.containerLayout, new LoginFragment())
                 .commit();
     }
 
     @Override
     public void sendCartView() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.containerLayout, new com.example.shoppingcart.ShoppingCartFragment())
+                .replace(R.id.containerLayout, new ShoppingCartFragment())
                 .commit();
     }
 
@@ -151,18 +160,18 @@ public class MainActivity extends AppCompatActivity implements ShoppingCartFragm
     }
 
     private void sendRequest(Request request, Return callback) {
-        toggleDialog(true, "Processing...");
+        if(callback.showDialog()) toggleDialog(true, "Processing...");
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                toggleDialog(false, null);
+                if(callback.showDialog()) toggleDialog(false, null);
                 e.printStackTrace();
                 runOnUiThread(() -> Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_LONG).show());
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                toggleDialog(false, null);
+                if(callback.showDialog()) toggleDialog(false, null);
 
                 ResponseBody responseBody = response.body();
 
@@ -193,6 +202,8 @@ public class MainActivity extends AppCompatActivity implements ShoppingCartFragm
         void response(@NotNull String response);
 
         void error(@NotNull String response);
+
+        boolean showDialog();
 
     }
 

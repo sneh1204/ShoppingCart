@@ -1,30 +1,35 @@
 package com.example.shoppingcart.models;
 
 public class Product {
+    String _id;
     String name;
     String photo;
     String region;
     double price;
     double discount;
-    int qty;
-    double total_product_price;
+    int qty = 1;
 
-    public Product(String name, String photo, String region, double price, double discount) {
-        this.name = name;
-        this.photo = photo;
-        this.region = region;
-        this.price = price;
-        this.discount = discount;
+    public String get_id() {
+        return _id;
     }
 
-    public Product(String name, String photo, String region, double price, double discount, int qty,double total_product_price ) {
-        this.name = name;
-        this.photo = photo;
-        this.region = region;
-        this.price = price;
-        this.discount = discount;
-        this.qty = qty;
-        this.total_product_price = total_product_price;
+    public void incr_qty(){
+        ++qty;
+    }
+
+    public void decr_qty(){
+        --qty;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public Product() {
+    }
+
+    public double getUpdatedPrice(){
+        return ((100 - discount) * this.price) / 100;
     }
 
     public String getName() {
@@ -75,32 +80,16 @@ public class Product {
         this.qty = qty;
     }
 
-    public double getTotal_product_price() {
-        return total_product_price;
-    }
-
-    public void setTotal_product_price(double total_product_price) {
-        this.total_product_price = total_product_price;
-    }
-
     @Override
     public String toString() {
         return "Product{" +
+                "id='" + _id + '\'' +
                 "name='" + name + '\'' +
                 ", photo='" + photo + '\'' +
                 ", region='" + region + '\'' +
                 ", price=" + price +
                 ", discount=" + discount +
                 ", qty=" + qty +
-                ", total_product_price=" + total_product_price +
                 '}';
-    }
-
-    public  static double calculateProductPrice(double price, double discount, int updatedQuantity) {
-        double discountPrice ;
-        double total_amount;
-        discountPrice = (price * discount)/100;
-        total_amount = (price - discountPrice) * updatedQuantity;
-        return total_amount;
     }
 }
