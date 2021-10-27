@@ -43,7 +43,7 @@ AMAD Project 6
 Base URL - > https://mysterious-beach-05426.herokuapp.com/
 
 * **POST** - auth/login - Authenticates a User and returns JWT Token. `Parameters - email, pass. (urlencoded)`
-* **POST** - auth/register - Registers a User profile and return JWT Token. `Parameters - email, pass, fullname, address. (urlencoded)`
+* **POST** - auth/signup - Registers a User profile and return JWT Token. `Parameters - email, pass, fullname, address. (urlencoded)`
 * **GET** - profile/view - View your User profile. `Headers - Your valid unexpired JWT Token.`
 * **POST** - profile/update - Updates your User profile. `Headers - Your valid unexpired JWT Token. Parameters - email, fullname, address. (urlencoded)`
 * **POST** - product/get - Get Product details by its ID. `Headers - Your valid unexpired JWT Token. Parameters - id. (urlencoded)`
