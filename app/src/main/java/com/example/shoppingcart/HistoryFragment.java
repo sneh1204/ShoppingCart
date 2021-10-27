@@ -79,7 +79,12 @@ public class HistoryFragment extends Fragment {
                 GsonBuilder builder = new GsonBuilder();
                 Gson gson = builder.create();
 
-                Transaction[] transactions = gson.fromJson(response, Transaction[].class);
+                Transaction[] transactions;
+                if(!response.equals("{}")){
+                    transactions = gson.fromJson(response, Transaction[].class);
+                }else{
+                    transactions = new Transaction[]{};
+                }
                 binding.recyclerView.setAdapter(new HistoryAdapter(user, new ArrayList<>(Arrays.asList(transactions)), new HistoryAdapter.onClick() {
                     @Override
                     public void doWork(Transaction transaction) {
