@@ -38,7 +38,7 @@
     <string name="products">Products</string>
     <string name="welcome">Welcome,</string>
     <string name="add">add</string>
-    <string name="shoppingCart">Shopping Cart</string>
+    <string name="shoppingCart">Your Cart</string>
     <string name="checkout">checkout</string>
     <string name="total">"Total: "</string>
     <string name="quantity">Quantity: </string>

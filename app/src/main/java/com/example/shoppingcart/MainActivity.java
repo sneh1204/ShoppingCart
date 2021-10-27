@@ -49,6 +49,14 @@ public class MainActivity extends AppCompatActivity implements ShoppingCartFragm
         sendLoginView();
     }
 
+    public void checkout(Return response){
+        Request request = new Request.Builder()
+                .url(BASE_URL + "product/checkout")
+                .addHeader("x-jwt-token", user.getToken())
+                .build();
+        sendRequest(request, response);
+    }
+
     public void profile(Return response){
         Request request = new Request.Builder()
                 .url(BASE_URL + "profile/view")

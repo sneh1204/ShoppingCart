@@ -28,6 +28,10 @@ public class Product {
     public Product() {
     }
 
+    public String getTotalCostString(){
+        return String.format("%.2f", qty * getUpdatedPrice());
+    }
+
     public double getUpdatedPrice(){
         return ((100 - discount) * this.price) / 100;
     }

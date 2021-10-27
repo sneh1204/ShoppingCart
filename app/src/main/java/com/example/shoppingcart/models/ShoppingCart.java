@@ -1,32 +1,44 @@
 package com.example.shoppingcart.models;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ShoppingCart {
 
-    HashMap<String, Product> productArrayList = new HashMap<>();
+    HashMap<String, Product> productList = new HashMap<>();
 
     public ShoppingCart() {
     }
 
-    public HashMap<String, Product> getProductArrayList() {
-        return productArrayList;
+    public HashMap<String, Product> getProductList() {
+        return productList;
     }
 
     public int quantity(Product product) {
-        if (getProductArrayList().containsKey(product.get_id()))
-            return getProductArrayList().get(product.get_id()).qty;
+        if (getProductList().containsKey(product.get_id()))
+            return getProductList().get(product.get_id()).qty;
         else return 0;
     }
 
-    public void setProductArrayList(HashMap<String, Product> productArrayList) {
-        this.productArrayList = productArrayList;
+    public void setProductList(HashMap<String, Product> productList) {
+        this.productList = productList;
+    }
+
+    public double getTotalCartCost(){
+        double cost = 0.00;
+        for (Map.Entry<String, Product> map:
+             productList.entrySet()) {
+            Product product = map.getValue();
+            cost += product.getUpdatedPrice() * product.getQty();
+        }
+
+        return cost;
     }
 
     @Override
     public String toString() {
         return "ShoppingCart{" +
-                "productArrayList=" + productArrayList +
+                "productList=" + productList +
                 '}';
     }
 }

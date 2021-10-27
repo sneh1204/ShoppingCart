@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.shoppingcart.databinding.FragmentProductsBinding;
 import com.example.shoppingcart.models.Product;
+import com.example.shoppingcart.models.ShoppingCart;
 import com.example.shoppingcart.models.User;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
@@ -50,11 +51,13 @@ public class ProductsFragment extends Fragment {
                 Gson gson = builder.create();
 
                 String token = user.getToken();
+                ShoppingCart cart = user.getShoppingCart();
 
                 user = gson.fromJson(response, User.class);
 
                 binding.name.setText(user.getFullname());
                 user.setToken(token);
+                user.setShoppingCart(cart);
                 am.setUser(user);
             }
 
@@ -105,7 +108,6 @@ public class ProductsFragment extends Fragment {
                 Gson gson = builder.create();
                 Product[] products = gson.fromJson(response, Product[].class);
 
-                Log.d("ddd", "response: " + new ArrayList<>(Arrays.asList(products)));
                 binding.productView.setAdapter(new ProductAdapter(user, new ArrayList<>(Arrays.asList(products))));
             }
 
@@ -135,7 +137,6 @@ public class ProductsFragment extends Fragment {
 
     public interface IProducts {
         User getUser();
-        void toggleDialog(boolean show);
         void setUser(User user);
         void sendLoginView();
         void sendCartView();

@@ -1,11 +1,9 @@
 package com.example.shoppingcart;
 
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -95,12 +93,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.UViewHol
             public void onClick(View view) {
 
                 ShoppingCart shoppingCart = user.getShoppingCart();
-                if(shoppingCart.getProductArrayList().containsKey(product.get_id())){
-                    Product product1 = shoppingCart.getProductArrayList().get(product.get_id());
+                if(shoppingCart.getProductList().containsKey(product.get_id())){
+                    Product product1 = shoppingCart.getProductList().get(product.get_id());
                     product1.incr_qty();
-                    shoppingCart.getProductArrayList().put(product.get_id(), product1);
+                    shoppingCart.getProductList().put(product.get_id(), product1);
                 }else{
-                    shoppingCart.getProductArrayList().put(product.get_id(), product);
+                    shoppingCart.getProductList().put(product.get_id(), product);
                 }
 
                 checkQuantity(holder, product);
@@ -113,9 +111,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.UViewHol
             @Override
             public void onClick(View view) {
                 ShoppingCart shoppingCart = user.getShoppingCart();
-                Product product1 = shoppingCart.getProductArrayList().get(product.get_id());
+                Product product1 = shoppingCart.getProductList().get(product.get_id());
                 product1.incr_qty();
-                shoppingCart.getProductArrayList().put(product.get_id(), product1);
+                shoppingCart.getProductList().put(product.get_id(), product1);
 
                 checkQuantity(holder, product);
 
@@ -126,9 +124,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.UViewHol
             @Override
             public void onClick(View view) {
                 ShoppingCart shoppingCart = user.getShoppingCart();
-                Product product1 = shoppingCart.getProductArrayList().get(product.get_id());
+                Product product1 = shoppingCart.getProductList().get(product.get_id());
                 product1.decr_qty();
-                shoppingCart.getProductArrayList().put(product.get_id(), product1);
+                shoppingCart.getProductList().put(product.get_id(), product1);
 
                 checkQuantity(holder, product);
 

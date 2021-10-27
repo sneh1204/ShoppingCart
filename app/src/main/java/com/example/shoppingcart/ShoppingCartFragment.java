@@ -15,22 +15,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.shoppingcart.databinding.FragmentShoppingCartBinding;
+import com.example.shoppingcart.models.Product;
 import com.example.shoppingcart.models.ShoppingCart;
 import com.example.shoppingcart.models.User;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class ShoppingCartFragment extends Fragment {
 
     FragmentShoppingCartBinding binding;
     ICart am;
-    ShoppingCart shoppingCart = new ShoppingCart();
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
+    User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +39,7 @@ public class ShoppingCartFragment extends Fragment {
         getActivity().setTitle(R.string.shoppingCart);
         binding = FragmentShoppingCartBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+        user = am.getUser();
 
         binding.bottomNavigation.setSelectedItemId(R.id.cart);
         binding.bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -53,6 +54,7 @@ public class ShoppingCartFragment extends Fragment {
                     case R.id.cart:
                         return true;
                     case R.id.logout:
+                        am.setUser(null);
                         am.sendLoginView();
                         return true;
                 }
@@ -67,8 +69,39 @@ public class ShoppingCartFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(binding.recyclerView.getContext(), llm.getOrientation());
         binding.recyclerView.addItemDecoration(dividerItemDecoration);
 
-       // Log.d("demo", "onCreateView: "+ shoppingCart.getProductArrayList());
-        //binding.recyclerView.setAdapter(new CartAdapter(shoppingCart.getProductArrayList()));
+        am.getProducts(new MainActivity.Return() {
+            @Override
+            public void response(@NonNull String response) {
+
+                GsonBuilder builder = new GsonBuilder();
+                Gson gson = builder.create();
+                Product[] products = gson.fromJson(response, Product[].class);
+
+                binding.recyclerView.setAdapter(new CartAdapter(user, new ArrayList<>(Arrays.asList(products)), new CartAdapter.onUpdate() {
+                    @Override
+                    public void update(User user) {
+                        binding.totalPrice.setText("$" + String.format("%.2f", user.getShoppingCart().getTotalCartCost()));
+                        am.setUser(user);
+                    }
+                }));
+            }
+
+            @Override
+            public boolean showDialog() {
+                return true;
+            }
+
+            @Override
+            public void error(@NonNull String response) {
+            }
+        });
+
+        binding.checkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         return view;
     }
@@ -84,7 +117,10 @@ public class ShoppingCartFragment extends Fragment {
     }
 
     public interface ICart {
+        void setUser(User user);
+        User getUser();
         void sendLoginView();
         void sendProductsView();
+        void getProducts(MainActivity.Return response);
     }
 }
